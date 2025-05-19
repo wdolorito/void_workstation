@@ -1,0 +1,85 @@
+#!/bin/sh
+
+#
+# ~/local/bin/lock_session
+#
+
+BACKGROUND="#000033"
+CONSOLELOCK="$(which vlock 2>/dev/null)"
+FONT="Alice-Regular"
+FONTFILL="white"
+IMAGEDIR="$HOME/Pictures"
+IMAGETXTFN="$IMAGEDIR/lock_image.txt"
+IMAGEPNGFN="$IMAGEDIR/lock_image.png"
+
+IWIDTH="1024"
+IHEIGHT="768"
+ISIZE="$(printf "%sx%s" "$IWIDTH" "$IHEIGHT")"
+
+MAGICK="$(which magick 2>/dev/null)"
+OFFSET="text 100,100"
+PTSIZE="$((IHEIGHT / 25))"
+SWAYLOCK="$(which swaylock 2>/dev/null)"
+
+show_command_not_found() {
+	printf "%s command not found\n" "$1"
+	exit 127
+}
+
+generate_lock_image() {
+	if ! [ -d "$IMAGEDIR" ]
+	then
+		mkdir -p "$IMAGEDIR"
+	fi
+
+	printf "%s\n\"%s\"" "$OFFSET" "$(lock_msg)" > "$IMAGETXTFN"
+	$MAGICK -size "$ISIZE" xc:"$BACKGROUND" -font "$FONT" -pointsize "$PTSIZE" -fill "$FONTFILL" -draw @"$IMAGETXTFN"  "$IMAGEPNGFN"
+}
+
+lock_wayland() {
+	$SWAYLOCK -e -F -f -i "$IMAGEPNGFN" -l -s fill -c "$BACKGROUND" --font "$FONT"  --indicator-radius "$((PTSIZE * 3))" --font-size "$PTSIZE"
+}
+
+lock_console() {
+	$CONSOLELOCK -a
+}
+
+if env | grep -q DISPLAY
+then
+	if [ -z "$MAGICK" ]
+	then
+		show_command_not_found "magick image utility"
+	fi
+
+	if [ -z "$SWAYLOCK" ]
+	then
+		show_command_not_found "swaylock screen locker utility"
+	fi
+else
+	if [ -z "$CONSOLELOCK" ]
+	then
+		show_command_not_found "vlock console locker utility"
+	fi
+fi
+
+if ! [ -f "$IMAGEPNGFN" ]
+then
+	generate_lock_image
+fi
+
+case "$1" in
+	reset )
+		rm -f "$IMAGETXTFN"
+		rm -f "$IMAGEPNGFN"
+		generate_lock_image
+		;;
+	* )
+		if env | grep -q DISPLAY
+		then
+			lock_wayland
+		else
+			lock_console
+		fi
+		exit 0
+		;;
+esac

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#
+# ~/local/bin/lock_msg
+#
+
+HOST="$(hostname)"
+LOCKMSG="Unlock Me"
+OSFN="/etc/os-release"
+OSLINE="$(head -n 1 "$OSFN" | awk -F "=" '{print $2}' | tr -d \")"
+USER="$(whoami)"
+USERLINE="$USER"@"$HOST"
+
+printf "\n\n%s\n\n%s\n\n%s\n" "$OSLINE" "$USERLINE" "$LOCKMSG"

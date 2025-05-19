@@ -1,0 +1,44 @@
++++ .bashrc	2025-05-13 10:26:22.800577218 -0600
+@@ -4,4 +4,41 @@
+ [[ $- != *i* ]] && return
+ 
+ alias ls='ls --color=auto'
+-PS1='[\u@\h \W]\$ '
++export PS1="\[\e[1;33m\]\u:\[\e[1;36m\]\w \[\e[0m\]\$ "
++
++# colorize man
++man() {
++	env \
++		LESS_TERMCAP_mb=$'\e[1;31m' \
++		LESS_TERMCAP_md=$'\e[1;31m' \
++		LESS_TERMCAP_me=$'\e[0m' \
++		LESS_TERMCAP_se=$'\e[0m' \
++		LESS_TERMCAP_so=$'\e[1;44;33m' \
++		LESS_TERMCAP_ue=$'\e[0m' \
++		LESS_TERMCAP_us=$'\e[1;32m' \
++			man "$@"
++}
++
++# ssh-agent
++export SSH_AUTH_SOCK="$HOME"/.ssh/ssh-agent.socket
++export SSH_ASKPASS_REQUIRE="never"
++"$HOME"/.ssh/add_ssh_keys
++
++# runit
++export SVDIR=$HOME/local/runit/services
++RUNSVDIR="$(which runsvdir 2>/dev/null)"
++SV=""
++if [ -n "$RUNSVDIR" ]
++then
++	SV="$(pgrep -u "$(whoami)" "$(basename "$RUNSVDIR")")"
++	if [ -z "$SV" ]
++	then
++		$RUNSVDIR -P "$SVDIR" &
++	fi
++fi
++
++# tmux
++if [ "$TERM" = "linux" ]
++then
++	start_tmux
++fi

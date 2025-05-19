@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#
+# ~/local/bin/pgoogle-chrome
+#
+
+google-chrome --incognito "$@"

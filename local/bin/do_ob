@@ -1,0 +1,82 @@
+#!/bin/sh
+
+#
+# ~/local/bin/do_ob
+#
+
+OB="$(which wob 2>/dev/null)"
+OBDIR="$XDG_RUNTIME_DIR/obdir"
+OST=1
+TMPPIDFN=""
+
+if ! [ -d "$OBDIR" ]
+then
+	mkdir "$OBDIR"
+fi
+
+do_error() {
+	EVAL=1
+	if [ -z "$1" ]
+	then
+		printf "\nPass an integer value to this script\n\n"
+	else
+		EVAL="$2"
+		printf "%b" "$1"
+	fi
+	exit "$EVAL"
+}
+
+clean_up() {
+	kill -TERM "$(cat "$TMPPIDFN")"
+	rm -f "$TMPPIDFN"
+	exit 0
+}
+
+final_clean() {
+	rm -rf "$OBDIR"
+	exit 0
+}
+
+do_tail() {
+	TMPPIDFN="$(mktemp -p "$OBDIR")"
+	tail -f "$OBSOCK" | $OB >/dev/null 2>&1 &
+	echo "$(($! - 1))" > "$TMPPIDFN"
+}
+
+do_disp() {
+	if [ -p "$OBSOCK" ]
+	then
+		do_tail
+		echo "$1" > "$OBSOCK"
+		sleep "$OST"
+		clean_up
+	else
+		do_error "\nNamed pipe does not exist\n\n" 1
+	fi
+}
+
+is_input_int() {
+	printf %d "$1" >/dev/null 2>&1
+}
+
+if [ -z "$1" ]
+then
+	do_error
+fi
+
+if [ -z "$OB" ]
+then
+	do_error "\nwob not installed\n\n" 127
+fi
+
+if is_input_int "$1"
+then
+	do_disp "$1"
+else
+	if [ "$1" = "clean" ]
+	then
+		final_clean
+	else
+		do_error
+	fi
+fi

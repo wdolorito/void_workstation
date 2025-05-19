@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#
+# ~/local/bin/floorp
+#
+
+FLATPAK="$(which flatpak 2>/dev/null)"
+INSTALLED=""
+PKG="one.ablaze.floorp"
+
+if [ -z "$FLATPAK" ]
+then
+	exit 127
+fi
+
+INSTALLED="$($FLATPAK list | grep $PKG)"
+
+if [ -n "$INSTALLED" ]
+then
+	$FLATPAK run "$PKG" "$@"
+else
+	exit 1
+fi

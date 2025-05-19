@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#
+# ~/local/bin/pfloorp
+#
+
+floorp --private-window "$@"

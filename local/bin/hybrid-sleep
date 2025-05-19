@@ -1,0 +1,16 @@
+#!/bin/sh
+
+#
+# ~/local/bin/hybrid-sleep
+#
+
+LOCK="lock_screen"
+LOGINCTL="$(which loginctl 2>/dev/null)"
+
+if [ -n "$LOGINCTL" ]
+then
+	$LOGINCTL hybrid-sleep
+	$LOCK
+else
+	exit 127
+fi

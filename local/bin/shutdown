@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#
+# ~/local/bin/shutdown
+#
+
+LOGINCTL="$(which loginctl 2>/dev/null)"
+
+if [ -n "$LOGINCTL" ]
+then
+	$LOGINCTL poweroff
+	exit 0
+else
+	exit 127
+fi

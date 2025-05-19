@@ -1,0 +1,11 @@
++++ .bash_profile	2025-05-19 10:08:33.802548059 -0600
+@@ -1,4 +1,9 @@
+ # .bash_profile
+ 
++if ! echo "$PATH" | grep -q "$(whoami)"
++then
++	PATH="$HOME/local/bin:$PATH"
++fi
++
+ # Get the aliases and functions
+ [ -f $HOME/.bashrc ] && . $HOME/.bashrc

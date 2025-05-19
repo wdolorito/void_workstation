@@ -1,0 +1,66 @@
+#!/bin/sh
+
+#
+# ~/local/bin/start_niri
+#
+
+BACKGROUND="$HOME/Pictures/<image>"
+OBSOCK="$(make_ob_sock)"
+OBSOCKPIDFN="$XDG_RUNTIME_DIR/obsockpid"
+GTK_THEME="Adwaita:dark"
+QT_QPA_PLATFORM="wayland"
+MOZ_ENABLE_WAYLAND=1
+
+setup_ob() {
+	tail -f "$OBSOCK" | wob &
+	echo "$(($! -1))" > "$OBSOCKPIDFN"
+}
+
+run_session() {
+	export OBSOCK
+	setup_ob
+	export GTK_THEME
+	export QT_QPA_PLATFORM
+	export MOZ_ENABLE_WAYLAND
+	/usr/bin/dbus-run-session -- /usr/bin/niri
+}
+
+reset_env() {
+	make_ob_sock destroy
+	rm -f "$OBSOCKPIDFN"
+	do_ob clean
+	unset OBSOCK
+	unset GTK_THEME
+	unset QT_QPA_PLATFORM
+	unset MOZ_ENABLE_WAYLAND
+	clear
+}
+
+set_background() {
+	swaybg -i "$BACKGROUND"
+	exit 0
+}
+
+set_idle() {
+	lock_session reset
+	swayidle -w \
+		timeout 300 'lock_session' \
+		timeout 600 'niri msg action power-off-monitors' \
+		timeout 1200 'hybrid-sleep' \
+		before-sleep 'lock_screen' >/dev/null 2>&1 &
+	exit 0
+}
+
+case "$1" in
+	idle )
+		set_idle
+		;;
+	background )
+		set_background
+		;;
+	* )
+		run_session
+		reset_env
+		;;
+
+esac

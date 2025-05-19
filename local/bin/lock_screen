@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#
+# ~/local/bin/lock_screen
+#
+
+PHYSLOCK="$(which physlock 2>/dev/null)"
+
+if [ -z "$PHYSLOCK" ]
+then
+    exit 127
+fi
+
+$PHYSLOCK -dmsp "$(lock_msg)"

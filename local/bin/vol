@@ -1,0 +1,44 @@
+#!/bin/sh
+
+#
+# ~/local/bin/vol
+#
+
+PACTL="$(which pactl 2>/dev/null)"
+if [ -z "$PACTL" ]
+then
+	printf "install a package that supplies the pactl utility\n"
+	exit 127
+fi
+
+CURR=$($PACTL list sinks | grep front-left: | awk '{print $5}' | tr -d '%')
+DISPVAL="0"
+
+case "$1" in
+	"up" )
+		if [ "$CURR" -lt 96 ]
+		then
+			$PACTL set-sink-volume @DEFAULT_SINK@ +5%
+		fi
+		;;
+	"down" )
+		$PACTL set-sink-volume @DEFAULT_SINK@ -5%
+		;;
+	"mute" )
+		$PACTL set-sink-mute @DEFAULT_SINK@ toggle
+		;;
+	"mic" )
+		$PACTL set-source-mute @DEFAULT_SOURCE@ toggle
+		;;
+	* )
+		;;
+esac
+
+MUTE=$($PACTL list sinks | grep 'Mute:' |  awk '{print $2}')
+
+if [ "$MUTE" = "no" ]
+then
+	DISPVAL="$($PACTL list sinks | grep 'Volume: front' | awk '{print $5}' | tr -d '%')"
+fi
+
+do_ob "$DISPVAL"

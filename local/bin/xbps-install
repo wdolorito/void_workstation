@@ -1,0 +1,26 @@
+#!/bin/sh
+
+#
+# ~/local/bin/xbps-install
+#
+
+DOAS="$(which doas 2>/dev/null)"
+DOASFN="/etc/doas.conf"
+CMD="xbps-install"
+EXISTS=""
+
+if [ -z "$DOAS" ]
+then
+	exit 127
+fi
+
+EXISTS="$(grep "$CMD" "$DOASFN" 2>&1)"
+
+if [ -n "$EXISTS" ]
+then
+	CMD="$(echo "$EXISTS" | awk '{print $7}')"
+	$DOAS "$CMD" "$@"
+else
+	exit 1
+fi
+

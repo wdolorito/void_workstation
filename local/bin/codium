@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#
+# ~/local/bin/codium
+#
+
+FLATPAK="$(which flatpak 2>/dev/null)"
+INSTALLED=""
+PKG="com.vscodium.codium"
+
+if [ -z "$FLATPAK" ]
+then
+	exit 127
+fi
+
+INSTALLED="$($FLATPAK list | grep $PKG)"
+
+if [ -n "$INSTALLED" ]
+then
+	$FLATPAK run "$PKG" --ozone-platform=wayland "$@"
+else
+	exit 1
+fi

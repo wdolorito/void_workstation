@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#
+# ~/local/bin/reboot
+#
+
+LOGINCTL="$(which loginctl 2>/dev/null)"
+
+if [ -n "$LOGINCTL" ]
+then
+	$LOGINCTL reboot
+	exit 0
+else
+	exit 127
+fi

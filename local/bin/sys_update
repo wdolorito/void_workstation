@@ -1,0 +1,8 @@
+#!/bin/sh
+
+xbps-install -Syu xbps
+xbps-install -Syu
+xbps-remove -ROoy
+vkpurge rm all
+
+flatpak_update

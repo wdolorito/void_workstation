@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#
+#  ~/local/runit-services/pipewire/finish
+#
+
+for SIG in $(pgrep -u "$(whoami)" pipewire)
+do
+	kill -TERM "$SIG"
+done

@@ -1,0 +1,31 @@
+#!/bin/sh
+
+#
+# ~/local/bin/make_ob_sock
+#
+
+SOCK="$XDG_RUNTIME_DIR/ob.sock"
+
+create_sock() {
+	if ! [ -p "$SOCK" ]
+	then
+		mkfifo "$SOCK"
+	fi
+}
+
+destroy_sock() {
+	if [ -p "$SOCK" ]
+	then
+		rm -f "$SOCK"
+	fi
+}
+
+case "$1" in
+	"destroy")
+		destroy_sock
+		;;
+	*)
+		create_sock
+		echo "$SOCK"
+		;;
+esac

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#
+# ~/local/bin/dmesg
+#
+
+CMD="dmesg"
+DOAS="$(which doas 2>/dev/null)"
+DOASFN="/etc/doas.conf"
+EXISTS=""
+
+if [ -z "$DOAS" ]
+then
+	exit 127
+fi
+
+EXISTS="$(grep "$CMD" "$DOASFN" 2>&1)"
+
+if [ -n "$EXISTS" ]
+then
+	CMD="$(echo "$EXISTS" | awk '{print $7}')"
+	$DOAS "$CMD" "$@"
+else
+	exit 1
+fi
