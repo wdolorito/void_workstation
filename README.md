@@ -25,7 +25,7 @@ mount -t sysfs sysfs sys
 mount -o bind /dev dev
 mount -t devpts devpts dev/pts
 mount -t efivarfs efivarfs sys/firmware/efi/efivars
-# make sure to clear link in unpack etc NOT booted system /etc
+# make sure to clear link in unpacked etc NOT booted system /etc
 rm -f etc/resolv.conf
 ln -s /etc/resolv.conf etc/resolv.conf
 chroot . /bin/bash
@@ -46,6 +46,9 @@ for package in $(tail -n+3 packages); do xbps-install -y "$package" ; done
 
 # fix for fbterm
 setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
+
+# edit doas.conf and cp to /etc
+cp doas.conf /etc
 
 # remove orphans and unused packages
 xbps-remove -RoOy
