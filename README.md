@@ -17,6 +17,7 @@ mkswap -L void_swap /dev/<some volume group>/void_swap
 cd
 mkdir root
 mount /dev/<some volume> "$HOME"/root
+tar xf void-<arch>-musl-ROOTFS-<date>.tar.xz -C "$HOME"/root
 
 # set up chroot
 cd root
