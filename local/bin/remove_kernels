@@ -1,0 +1,42 @@
+#!/bin/sh
+
+#
+# ~/local/bin/remove_kernels
+#
+
+DOAS="$(which doas 2>/dev/null)"
+DOASFN="/etc/doas.conf"
+CMD="vkpurge"
+EXISTS=""
+KERNLIST=""
+
+if [ -z "$DOAS" ]
+then
+	exit 127
+fi
+
+EXISTS="$(grep "$CMD" "$DOASFN" 2>/dev/null)"
+
+if [ -n "$EXISTS" ]
+then
+	CMD="$(echo "$EXISTS" | awk '{print $7}')"
+else
+	exit 1
+fi
+
+check_kernels() {
+	echo "Checking installed kernels..."
+	KERNLIST="$($DOAS "$CMD" list)"
+}
+
+remove_kernels() {
+	echo "Removing all previous kernels..."
+	$DOAS "$CMD" rm all
+}
+
+check_kernels
+
+if [ -n "$KERNLIST" ]
+then
+	remove_kernels
+fi
