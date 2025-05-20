@@ -110,9 +110,17 @@ reboot
 ## after reboot
 
 ```
-# login as user
+# login as root to enable services
+ln -s /etc/sv/bluetooth /var/service
+ln -s /etc/sv/dbus /var/service
+ln -s /etc/sv/dhcpcd /var/service
+ln -s /etc/sv/elogind /var/service
+ln -s /etc/sv/iwd /var/service
+ln -s /etc/sv/ntpd /var/service
+
+# logout and login as user
 cd <path of this repo>
-cp -r dots/.fbtermrc .gitconfig .ssh ~/
+cp -r dots/.fbtermrc dots/.gitconfig dots/.ssh ~/
 mkdir ~/.config
 cp -r niri tmux waybar wob ~/.config
 cp -r local ~/
@@ -130,12 +138,6 @@ for app in $(cat flatpak_apps.txt) ; flatpak install flathub -y --noninteractive
 
 # set codium to use sandboxed utils
 flatpak --user override --env="FLATPAK_ENABLE_SDK_EXT=llvm20,node22,openjdk21" com.vscodium.codium
-
-# logout and back in as root to enable services
-ln -s /etc/sv/dbus /var/service
-ln -s /etc/sv/elogind /var/service
-ln -s /etc/sv/iwd /var/service
-ln -s /etc/sv/ntpd /var/service
 
 # logout and back in as user
 start_niri
