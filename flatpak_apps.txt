@@ -12,8 +12,6 @@ org.geany.Geany
 org.gimp.GIMP
 org.gnome.Aisleriot
 org.gnome.Characters
-org.gnome.Platform
-org.gnome.Platform
 org.gnome.font-viewer
 org.gnome.gitlab.somas.Apostrophe
 org.horizon_eda.HorizonEDA

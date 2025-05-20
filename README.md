@@ -134,7 +134,7 @@ patch < <path of this repo>/bashrc.patch
 # setup and install flatpaks
 flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-for app in $(cat flatpak_apps.txt) ; flatpak install flathub -y --noninteractive "$app" ; done
+for app in $(cat flatpak_apps.txt) ; do flatpak install flathub -y --noninteractive "$app" ; done
 
 # set codium to use sandboxed utils
 flatpak --user override --env="FLATPAK_ENABLE_SDK_EXT=llvm20,node22,openjdk21" com.vscodium.codium
