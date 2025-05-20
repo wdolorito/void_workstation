@@ -131,6 +131,12 @@ patch < <path of this repo>/bash_logout.patch
 patch < <path of this repo>/bash_profile.patch
 patch < <path of this repo>/bashrc.patch
 
+# setup pipewire
+mkdir -p .config/pipewire/pipewire.conf.d
+cd .config/pipewire/pipewire.conf.d
+ln -s /usr/share/examples/wireplumber/10-wireplumber.conf
+ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf
+
 # setup and install flatpaks
 flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
