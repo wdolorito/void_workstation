@@ -117,6 +117,12 @@ mkdir ~/.config
 cp -r niri tmux waybar wob ~/.config
 cp -r local ~/
 
+# patch bash support files
+cd
+patch < <path of this repo>/bash_logout.patch
+patch < <path of this repo>/bash_profile.patch
+patch < <path of this repo>/bashrc.patch
+
 # setup and install flatpaks
 flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
