@@ -33,7 +33,7 @@ chroot . /bin/bash
 
 # update
 xbps-install -Syu xbps
-xbps-install -Syu
+xbps-install -yu
 
 cd <path of this repo>
 # install nano and void-repo-nonfree
