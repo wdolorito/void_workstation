@@ -91,7 +91,7 @@ echo <awesome hostname> > /etc/hostname
 # find timezone by looking through /usr/share/zoneinfo and then run the following command
 ln -s /usr/share/zoneinfo/<timezone> /etc/localtime
 
-# install grub (omit no-vram option if this is only installation, otherwise make sure refind is installed)
+# install grub (omit no-nvram option if this is only installation, otherwise make sure refind is installed)
 grub-install --efi-directory=/boot/efi --no-nvram
 
 # make sure a grub.cfg is present for boot
