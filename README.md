@@ -48,9 +48,6 @@ for package in $(tail -n+3 packages); do xbps-install -y "$package" ; done
 # fix for fbterm
 setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
 
-# edit doas.conf and cp to /etc
-cp doas.conf /etc
-
 # remove orphans and unused packages
 xbps-remove -RoOy
 
@@ -64,6 +61,9 @@ useradd -m <user>
 usermod -a -G "$(cat user_groups) <user>
 passwd user
 
+# edit doas.conf (replace <user> in file with newly created user) and cp to /etc
+cp doas.conf /etc
+
 # update root password
 passwd
 
@@ -74,15 +74,15 @@ blkid | grep void_swap >> /etc/fstab
 # the next step would be to edit fstab. example:
 # See fstab(5).
 #
-# <file system>								<dir>		<type>	<options>						<dump>	<pass>
+# <file system>					<dir>		<type>	<options>			<dump>	<pass>
 # root
-#UUID=12345678-90ab-cdef-1234-567890abcdef  /           ext4    rw,relatime,errors=remount-ro   0   	1
+#UUID=12345678-90ab-cdef-1234-567890abcdef	/		ext4	rw,relatime,errors=remount-ro	0	1
 # efi
-#UUID=1234-5678                             /boot/efi   vfat    umask=0077						0		1
+#UUID=1234-5678					/boot/efi	vfat	umask=0077			0	1
 # tmp
-#tmpfs										/tmp		tmpfs	defaults,nosuid,nodev			0		0
+#tmpfs						/tmp		tmpfs	defaults,nosuid,nodev		0	0
 #swap
-#UUID=12345678-90ab-cdef-1234-567890abcdef	swap		swap	sw								0		0
+#UUID=12345678-90ab-cdef-1234-567890abcdef	swap		swap	sw				0	0
 mount -a
 
 # set hostname
