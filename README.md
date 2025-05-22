@@ -28,7 +28,7 @@ mount -t devpts devpts dev/pts
 mount -t efivarfs efivarfs sys/firmware/efi/efivars
 # make sure to clear link in unpacked etc NOT booted system /etc
 rm -f etc/resolv.conf
-ln -s /etc/resolv.conf etc/resolv.conf
+cp /etc/resolv.conf etc/resolv.conf
 chroot . /bin/bash
 
 # update
