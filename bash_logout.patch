@@ -11,7 +11,7 @@
 +
 +NUMSESSIONS="$($LOGINCTL | grep "$(whoami)" | grep -n . | tail -n 1 | awk -F \: '{print $1}')"
 +
-+if [ "$NUMSESSIONS" -eq 1]
++if [ "$NUMSESSIONS" -eq 1 ]
 +then
 +	if [ -S "$SSH_AUTH_SOCK" ]
 +	then
