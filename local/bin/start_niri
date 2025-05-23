@@ -46,8 +46,7 @@ set_idle() {
 	swayidle -w \
 		timeout 300 'lock_session' \
 		timeout 600 'niri msg action power-off-monitors' \
-		timeout 1200 'hybrid-sleep' \
-		before-sleep 'lock_screen' >/dev/null 2>&1 &
+		timeout 1200 'hybrid-sleep'
 	exit 0
 }
 
