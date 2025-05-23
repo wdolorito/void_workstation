@@ -1,5 +1,5 @@
-+++ .bash_logout	2025-05-19 18:31:29.948802077 -0600
-@@ -1,2 +1,26 @@
++++ .bash_logout	2025-05-23 15:57:36.685243408 -0600
+@@ -1,2 +1,28 @@
  # ~/.bash_logout
  
 +LOGINCTL="$(which loginctl 2>/dev/null)"
@@ -26,3 +26,5 @@
 +		fi
 +	fi
 +fi
++
++clear
