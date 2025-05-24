@@ -122,7 +122,7 @@ ln -s /etc/sv/ntpd /var/service
 cd <path of this repo>
 cp -r dots/.fbtermrc dots/.gitconfig dots/.ssh ~/
 mkdir ~/.config
-cp -r niri tmux waybar wob ~/.config
+cp -r niri tmux waybar wob xdg-desktop-portal ~/.config
 cp -r local ~/
 
 # patch bash support files
