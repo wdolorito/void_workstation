@@ -4,13 +4,14 @@
 # ~/local/bin/hybrid-sleep
 #
 
+DOAS="$(which doas 2>/dev/null)"
 LOCK="lock_screen"
-LOGINCTL="$(which loginctl 2>/dev/null)"
+ZZZ="$(which zzz 2>/dev/null)"
 
-if [ -n "$LOGINCTL" ]
+if [ -z "$DOAS" ]
 then
-	$LOGINCTL hybrid-sleep
-	$LOCK
-else
 	exit 127
 fi
+
+$DOAS "$ZZZ" -H
+$LOCK
