@@ -8,17 +8,17 @@ DOAS="$(which doas 2>/dev/null)"
 XBINST="$(which xbps-install 2>/dev/null)"
 XBREM="$(which xbps-remove 2>/dev/null)"
 
+if [ -z "$XBINST" ] || [ -z "$XBREM" ] || [ -z "$DOAS" ]
+then
+	exit 127
+fi
+
 do_system_update() {
 	echo "Updating the Void..."
 	$XBINST -Syu xbps
 	$XBINST -yu
 	$XBREM -RyoO
 }
-
-if [ -z "$XBINST" ] || [ -z "$XBREM" ] | [ -z "$DOAS" ]
-then
-	exit 127
-fi
 
 do_system_update
 flatpak_update
