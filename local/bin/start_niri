@@ -6,19 +6,12 @@
 
 BACKGROUND="$HOME/Pictures/<image>"
 OBSOCK="$(make_ob_sock)"
-OBSOCKPIDFN="$XDG_RUNTIME_DIR/obsockpid"
 GTK_THEME="Adwaita:dark"
 QT_QPA_PLATFORM="wayland"
 MOZ_ENABLE_WAYLAND=1
 
-setup_ob() {
-	tail -f "$OBSOCK" | wob &
-	echo "$(($! -1))" > "$OBSOCKPIDFN"
-}
-
 run_session() {
 	export OBSOCK
-	setup_ob
 	export GTK_THEME
 	export QT_QPA_PLATFORM
 	export MOZ_ENABLE_WAYLAND
@@ -27,7 +20,6 @@ run_session() {
 
 reset_env() {
 	make_ob_sock destroy
-	rm -f "$OBSOCKPIDFN"
 	do_ob clean
 	unset OBSOCK
 	unset GTK_THEME
@@ -61,5 +53,4 @@ case "$1" in
 		run_session
 		reset_env
 		;;
-
 esac
