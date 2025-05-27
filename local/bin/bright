@@ -53,4 +53,6 @@ if [ "$DOOB" -eq 1 ]
 then
 	OBVAL="$(echo "$DISPVAL" | tr -d '(%)')"
 	do_ob "$OBVAL"
+else
+	echo "$DISPVAL"
 fi

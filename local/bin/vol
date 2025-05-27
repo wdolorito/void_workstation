@@ -11,7 +11,7 @@ then
 	exit 127
 fi
 
-CURR=$($PACTL list sinks | grep front-left: | awk '{print $5}' | tr -d '%')
+CURR="$($PACTL get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | tr -d '%')"
 DISPVAL="0"
 
 case "$1" in
@@ -34,11 +34,16 @@ case "$1" in
 		;;
 esac
 
-MUTE=$($PACTL list sinks | grep 'Mute:' |  awk '{print $2}')
+MUTE="$($PACTL get-sink-mute @DEFAULT_SINK@ |  awk '{print $2}')"
 
 if [ "$MUTE" = "no" ]
 then
-	DISPVAL="$($PACTL list sinks | grep 'Volume: front' | awk '{print $5}' | tr -d '%')"
+	DISPVAL="$($PACTL get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | tr -d '%')"
 fi
 
-do_ob "$DISPVAL"
+if [ -p "$OBSOCK" ]
+then
+	do_ob "$DISPVAL"
+else
+	echo "$DISPVAL"
+fi
