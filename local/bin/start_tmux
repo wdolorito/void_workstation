@@ -58,6 +58,10 @@ run_tmux() {
 
 if [ -t 0 ]
 then
+	if [ -n "$1" ]
+	then
+		SESSION="$1"
+	fi
 	if ! env | grep -q DISPLAY
 	then
 		run_tmux "use fbterm"
