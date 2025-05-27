@@ -17,6 +17,11 @@ fi
 
 DEV="$($CMD | tr -d \' | grep backlight | awk '{print $2}')"
 
+if ! [ -p "$OBSOCK" ]
+then
+	DOOB=0
+fi
+
 if [ -n "$2" ]
 then
 	if [ "$2" = "false" ]
@@ -40,7 +45,6 @@ case "$COMP" in
 	"on" )
 		$CMD -qrd "$DEV"
 		;;
-		
 	[0-9]* )
 		$CMD -qd "$DEV" set "$COMP"%
 		;;
