@@ -15,6 +15,7 @@ run_session() {
 	export GTK_THEME
 	export QT_QPA_PLATFORM
 	export MOZ_ENABLE_WAYLAND
+	bright 30 false
 	/usr/bin/dbus-run-session -- /usr/bin/niri
 }
 
