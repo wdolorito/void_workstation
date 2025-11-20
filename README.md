@@ -147,4 +147,7 @@ flatpak --user override --env="FLATPAK_ENABLE_SDK_EXT=llvm20,node22,openjdk21" c
 
 # logout and back in as user
 start_niri
+
+# open terminal in niri and enter following for dark mode
+gsettings org.gnome.desktop.interface color-scheme 'prefer-dark'
 ```
