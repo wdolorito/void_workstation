@@ -1,0 +1,33 @@
+#!/bin/sh
+
+#
+# ~/local/bin/sudo
+#
+
+DOAS="$(which doas 2>/dev/null)"
+PATH="/bin:/sbin"
+BCMD=""
+
+if [ -n "$DOAS" ]
+then
+	if [ -n "$1" ]
+	then
+		BCMD="$(which "$1" 2>/dev/null)"
+		if [ -n "$BCMD" ]
+		then
+			shift 1
+			$DOAS "$BCMD" "$@"
+		else
+			echo "$1" "not available."
+			exit 1
+		fi
+	else
+		echo "Please pass a command to this utility."
+		exit 1
+	fi
+
+
+else
+	echo "doas command not available."
+	exit 127
+fi
