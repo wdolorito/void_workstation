@@ -1,7 +1,7 @@
 {
 	"height": 30,
-        "modules-left": ["niri/workspaces", "niri/window"],
-	"modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "backlight", "battery", "clock"],
+	"modules-left": ["niri/workspaces", "niri/window"],
+	"modules-right": ["idle_inhibitor", "wireplumber#sink", "wireplumber#source", "network", "cpu", "memory", "backlight", "battery", "clock"],
 	"idle_inhibitor": {
 		"format": "{icon}",
 		"format-icons": {
@@ -9,24 +9,26 @@
 			"deactivated": " "
 		}
 	},
-	"pulseaudio": {
+	"wireplumber#sink": {
 		"format": "{volume}% {icon}",
-		"format-bluetooth": "{volume}% {icon}  ",
-		"format-muted": " ",
+		"format-muted": "",
 		"format-icons": {
 			"headphones": " ",
-			"phone": " ",
-			"phone-muted": " ",
-			"portable": " ",
-			"default": [" ", " "]
+			"default": ["", " "]
 		},
-		"scroll-step": 1,
+		"scroll-step": 5,
 		"on-click": "pavucontrol"
 	},
+	"wireplumber#source": {
+		"node-type": "Audio/Source",
+		"format": "{icon}",
+		"format-muted": " ",
+		"format-icons": " "
+	},
 	"network": {
-		"interface": "wlp2s0",
+		"interface": "wlp1s0",
 		"format-wifi": "{essid} ({signalStrength}%) ",
-		"format-linked": "{ifname} (No IP) ",
+		"format-linked": "{ifname} (No IP) ⚠ ",
 		"format-disconnected": "Disconnected ⚠",
 		"format-alt": "{ifname}: {ipaddr}/{cidr}"
 	},

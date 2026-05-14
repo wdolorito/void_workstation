@@ -21,7 +21,7 @@ window#waybar {
 #idle_inhibitor,
 #memory,
 #network,
-#pulseaudio {
+#wireplumber {
 	color: #000000;
 	background-color: #BCB8B1;
 	padding: 0 10px;
@@ -60,7 +60,7 @@ window#waybar {
 	background-color: #E0AFA0;
 }
 
-#pulseaudio.muted {
+#wireplumber.muted {
 	background-color: #E0AFA0;
 }
 
