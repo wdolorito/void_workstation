@@ -9,6 +9,7 @@ SUDO="$(which sudo 2>/dev/null)"
 
 if [ -z "$SUDO" ]
 then
+	echo "sudo command not available."
 	exit 127
 else
 	$SUDO "$CMD"
