@@ -1,1 +1,1 @@
-<user>,tty,disk,dialout,audio,video,cdrom,optical,network,kvm,input,plugdev,users,bluetooth
+<user>,wheel,tty,disk,dialout,audio,video,adm,cdrom,optical,network,kvm,input,plugdev,users,bluetooth
