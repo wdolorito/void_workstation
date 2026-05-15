@@ -6,7 +6,7 @@
 
 OB="$(which wob 2>/dev/null)"
 OBDIR="$XDG_RUNTIME_DIR/obdir"
-OST=1
+OST=2
 TMPPIDFN=""
 
 if ! [ -d "$OBDIR" ]
