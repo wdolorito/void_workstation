@@ -29,12 +29,10 @@ do_error() {
 clean_up() {
 	kill -TERM "$(cat "$TMPPIDFN")"
 	rm -f "$TMPPIDFN"
-	exit 0
 }
 
 final_clean() {
 	rm -rf "$OBDIR"
-	exit 0
 }
 
 do_tail() {

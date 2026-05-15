@@ -14,7 +14,7 @@ run_session() {
 	export QT_QPA_PLATFORM
 	export MOZ_ENABLE_WAYLAND
 	bright 30 false
-	/usr/bin/dbus-run-session -- /usr/bin/niri
+	/usr/bin/dbus-run-session -- /usr/bin/niri --session
 }
 
 reset_env() {
@@ -28,7 +28,6 @@ reset_env() {
 
 set_background() {
 	swaybg -i "$BACKGROUND"
-	exit 0
 }
 
 set_idle() {
@@ -37,7 +36,6 @@ set_idle() {
 		timeout 300 'lock_session' \
 		timeout 600 'niri msg action power-off-monitors' \
 		timeout 1200 'hybrid-sleep'
-	exit 0
 }
 
 case "$1" in
