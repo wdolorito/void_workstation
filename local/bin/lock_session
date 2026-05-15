@@ -22,7 +22,7 @@ PTSIZE="$((IHEIGHT / 25))"
 SWAYLOCK="$(which swaylock 2>/dev/null)"
 
 show_command_not_found() {
-	printf "%s command not found\n" "$1"
+	printf "%s command not available.\n" "$1"
 	exit 127
 }
 
@@ -80,6 +80,5 @@ case "$1" in
 		else
 			lock_console
 		fi
-		exit 0
 		;;
 esac
