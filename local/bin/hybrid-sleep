@@ -4,14 +4,15 @@
 # ~/local/bin/hybrid-sleep
 #
 
-DOAS="$(which doas 2>/dev/null)"
+SUDO="$(which sudo 2>/dev/null)"
 LOCK="lock_screen"
-ZZZ="$(which zzz 2>/dev/null)"
+ZZZ="zzz"
 
-if [ -z "$DOAS" ]
+if [ -z "$SUDO" ]
 then
+	echo "sudo command not available."
 	exit 127
+else
+	$SUDO "$ZZZ" -H
+	$LOCK
 fi
-
-$DOAS "$ZZZ" -H
-$LOCK
