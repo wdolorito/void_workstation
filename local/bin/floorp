@@ -10,10 +10,7 @@ PKG="one.ablaze.floorp"
 
 launch() {
 	case "$XDG_SESSION_TYPE" in
-		"wayland" )
-			$FLATPAK run "$PKG" --ozone-platform=wayland "$@"
-			;;
-		"x11" )
+		"wayland" | "x11")
 			$FLATPAK run "$PKG" "$@"
 			;;
 		* )
