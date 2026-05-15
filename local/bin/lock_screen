@@ -8,7 +8,8 @@ PHYSLOCK="$(which physlock 2>/dev/null)"
 
 if [ -z "$PHYSLOCK" ]
 then
-    exit 127
+	echo "physlock command not available.
+	exit 127
 fi
 
 $PHYSLOCK -dmsp "$(lock_msg)"
