@@ -4,22 +4,23 @@
 # ~/local/bin/sys_update
 #
 
-DOAS="$(which doas 2>/dev/null)"
-XBINST="$(which xbps-install 2>/dev/null)"
-XBREM="$(which xbps-remove 2>/dev/null)"
-
-if [ -z "$XBINST" ] || [ -z "$XBREM" ] || [ -z "$DOAS" ]
-then
-	exit 127
-fi
+SUDO="$(which sudo 2>/dev/null)"
+XBINST="xbps-install"
+XBREM="xbps-remove"
 
 do_system_update() {
 	echo "Updating the Void..."
-	$XBINST -Syu xbps
-	$XBINST -yu
-	$XBREM -RyoO
+	$SUDO "$XBINST" -Syu xbps
+	$SUDO "$XBINST" -yu
+	$SUDO "$XBREM" -RyoO
 }
 
-do_system_update
-flatpak_update
-remove_kernels
+if [ -z "$SUDO" ]
+then
+	echo "sudo command not available."
+	exit 127
+else
+	do_system_update
+	flatpak_update
+	remove_kernels
+fi
