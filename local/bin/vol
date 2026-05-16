@@ -29,6 +29,7 @@ case "$1" in
 		;;
 	"mic" )
 		$PACTL set-source-mute @DEFAULT_SOURCE@ toggle
+		exit
 		;;
 	* )
 		;;
