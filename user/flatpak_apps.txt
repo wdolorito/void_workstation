@@ -1,4 +1,5 @@
 com.github.tchx84.Flatseal
+com.google.Chrome
 com.transmissionbt.Transmission
 com.ultimaker.cura
 com.vscodium.codium
