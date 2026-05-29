@@ -1,21 +1,15 @@
-+++ .bash_logout	2025-05-23 15:57:36.685243408 -0600
-@@ -1,2 +1,28 @@
++++ .bash_logout	2026-05-28 18:57:25.733498600 -0600
+@@ -1,2 +1,22 @@
  # ~/.bash_logout
  
 +LOGINCTL="$(which loginctl 2>/dev/null)"
 +
-+if [ -z "$LOGINCTL" ]
++if [ -n "$LOGINCTL" ]
 +then
-+	exit
-+fi
-+
-+NUMSESSIONS="$($LOGINCTL | grep "$(whoami)" | grep -n . | tail -n 1 | awk -F \: '{print $1}')"
-+
-+if [ "$NUMSESSIONS" -eq 1 ]
-+then
-+	if [ -S "$SSH_AUTH_SOCK" ]
++	NUMSESS="$($LOGINCTL | grep -c "$(whoami)")"
++	if [ -z "$TMUX" ] && [ "$NUMSESS" -eq 1 ]
 +	then
-+		if [ -z "$TMUX" ]
++		if [ -S "$SSH_AUTH_SOCK" ]
 +		then
 +			for AGENT in $(pgrep ssh-agent)
 +			do
