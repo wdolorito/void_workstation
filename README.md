@@ -123,7 +123,7 @@ ln -s /etc/sv/ntpd /var/service
 
 # logout and login as user
 cd <path of this repo>
-cp -r user/dots/.fbtermrc user/dots/.gitconfig user/dots/.ssh ~/
+cp -r user/dots/.fbtermrc user/dots/.gitconfig user/dots/.nanorc user/dots/.ssh ~/
 mkdir ~/.config
 cp -r user/config/* ~/.config
 cp -r user/local ~/
