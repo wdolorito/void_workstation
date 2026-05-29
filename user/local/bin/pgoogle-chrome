@@ -4,4 +4,12 @@
 # ~/local/bin/pgoogle-chrome
 #
 
-google-chrome --incognito "$@"
+CMD="$(which google-chrome 2>/dev/null)"
+
+if [ -n "$CMD" ]
+then
+	$CMD --incognito "$@"
+else
+	echo "google-chrome command not available."
+	exit 127
+fi
