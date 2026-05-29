@@ -5,21 +5,30 @@
 #
 
 BACKGROUND="$HOME/Pictures/<image>"
-OBSOCK="$(make_ob_sock)"
+OBSOCK="$(make_ob_sock 2>/dev/null)"
 QT_QPA_PLATFORM="wayland"
 MOZ_ENABLE_WAYLAND=1
+NIRI="$(which niri 2>/dev/null)"
+DSESS="$(which dbus-run-session)"
 
 run_session() {
-	export OBSOCK
-	export QT_QPA_PLATFORM
-	export MOZ_ENABLE_WAYLAND
-	bright 30 false
-	/usr/bin/dbus-run-session -- /usr/bin/niri --session
+	if [ -n "$NIRI" ]
+	then
+		export OBSOCK
+		export QT_QPA_PLATFORM
+		export MOZ_ENABLE_WAYLAND
+		bright 30 false
+		cd "$HOME" || exit
+		$DSESS -- "$NIRI" --session
+	else
+		echo "niri command not available."
+		exit 127
+	fi
 }
 
 reset_env() {
-	make_ob_sock destroy
-	do_ob clean
+	make_ob_sock destroy 2>/dev/null
+	do_ob clean 2>/dev/null
 	unset OBSOCK
 	unset QT_QPA_PLATFORM
 	unset MOZ_ENABLE_WAYLAND
@@ -27,15 +36,15 @@ reset_env() {
 }
 
 set_background() {
-	swaybg -i "$BACKGROUND"
+	swaybg -i "$BACKGROUND" 2>/dev/null
 }
 
 set_idle() {
-	lock_session reset
+	lock_session reset 2>/dev/null
 	swayidle -w \
 		timeout 300 'lock_session' \
 		timeout 600 'niri msg action power-off-monitors' \
-		timeout 1200 'hybrid-sleep'
+		timeout 1200 'hybrid-sleep' 2>/dev/null
 }
 
 case "$1" in
