@@ -13,7 +13,7 @@ mkfs.ext4 -L void_root /dev/<some volume group>/void_root
 
 lvcreate -n void_swap -L <a little more than installed system ram> <some volume group>
 mkswap -L void_swap /dev/<some volume group>/void_swap
-# as super user
+# as root
 cd
 mkdir root
 mount /dev/<some volume> "$HOME"/root
@@ -21,11 +21,11 @@ tar xf void-<arch>-musl-ROOTFS-<date>.tar.xz -C "$HOME"/root
 
 # set up chroot
 cd root
-mount -t proc proc proc
-mount -t sysfs sysfs sys
+mount -o bind /proc proc
+mount -o bind /sys sys
 mount -o bind /dev dev
-mount -t devpts devpts dev/pts
-mount -t efivarfs efivarfs sys/firmware/efi/efivars
+mount -o bind /dev/pts dev/pts
+mount -o bind /sys/firmware/efi/efivars sys/firmware/efi/efivars
 # make sure to clear link in unpacked etc NOT booted system /etc
 rm -f etc/resolv.conf
 cp /etc/resolv.conf etc/resolv.conf
@@ -52,16 +52,16 @@ setcap 'cap_sys_tty_config+ep' /usr/bin/fbterm
 xbps-remove -RoOy
 
 # ignore and remove sudo and wpa_supplicant
-cp ignore-sudo.conf /etc/xbps.d
-cp ignore-wpa_supplicant.conf /etc/xbps.d
+cp system/ignore-sudo.conf /etc/xbps.d
+cp system/ignore-wpa_supplicant.conf /etc/xbps.d
 xbps-remove -Ry sudo wpa_supplicant
 
 # setup a user
 useradd -m <user>
-usermod -a -G "$(cat user_groups) <user>
+usermod -a -G "$(cat system/user_groups) <user>
 passwd user
 
-# edit doas.conf (replace <user> in file with newly created user) and cp to /etc
+# doas with groups!
 cp doas.conf /etc
 
 # update root password
@@ -76,13 +76,13 @@ blkid | grep void_swap >> /etc/fstab
 #
 # <file system>					<dir>		<type>	<options>			<dump>	<pass>
 # root
-#UUID=12345678-90ab-cdef-1234-567890abcdef	/		ext4	rw,relatime,errors=remount-ro	0	1
+#UUID=12345678-90ab-cdef-1234-567890abcdef	/			ext4	rw,relatime,errors=remount-ro	0	1
 # efi
-#UUID=1234-5678					/boot/efi	vfat	umask=0077			0	1
+#UUID=1234-5678								/boot/efi	vfat	umask=0077						0	1
 # tmp
-#tmpfs						/tmp		tmpfs	defaults,nosuid,nodev		0	0
+#tmpfs										/tmp		tmpfs	defaults,nosuid,nodev			0	0
 #swap
-#UUID=12345678-90ab-cdef-1234-567890abcdef	swap		swap	sw				0	0
+#UUID=12345678-90ab-cdef-1234-567890abcdef	swap		swap	sw								0	0
 mount -a
 
 # set hostname
@@ -104,6 +104,9 @@ update-grub
 
 # wrap up chroot install (also generates initrd)
 xbps-reconfigure -fa
+exit
+cd
+umount -R root
 reboot
 ```
 
@@ -120,16 +123,16 @@ ln -s /etc/sv/ntpd /var/service
 
 # logout and login as user
 cd <path of this repo>
-cp -r dots/.fbtermrc dots/.gitconfig dots/.ssh ~/
+cp -r user/dots/.fbtermrc user/dots/.gitconfig user/dots/.ssh ~/
 mkdir ~/.config
-cp -r config/* ~/.config
-cp -r local ~/
+cp -r user/config/* ~/.config
+cp -r user/local ~/
 
 # patch bash support files
 cd
-patch < <path of this repo>/bash_logout.patch
-patch < <path of this repo>/bash_profile.patch
-patch < <path of this repo>/bashrc.patch
+patch < <path of this repo>/user/bash_logout.patch
+patch < <path of this repo>/user/bash_profile.patch
+patch < <path of this repo>/user/bashrc.patch
 
 # setup pipewire
 mkdir -p .config/pipewire/pipewire.conf.d
@@ -139,15 +142,11 @@ ln -s /usr/share/examples/pipewire/20-pipewire-pulse.conf
 
 # setup and install flatpaks
 flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-flatpak --user remote-add --if-not-exists flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-for app in $(cat flatpak_apps.txt) ; do flatpak install flathub -y --noninteractive "$app" ; done
-
-# set codium to use sandboxed utils
-flatpak --user override --env="FLATPAK_ENABLE_SDK_EXT=llvm20,node22,openjdk21" com.vscodium.codium
+for app in $(cat user/flatpak_apps.txt) ; do flatpak install flathub -y --noninteractive "$app" ; done
 
 # logout and back in as user
 start_niri
 
 # open terminal in niri and enter following for dark mode
-gsettings org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 ```
