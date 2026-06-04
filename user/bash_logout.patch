@@ -1,13 +1,14 @@
-+++ .bash_logout	2026-05-28 18:57:25.733498600 -0600
-@@ -1,2 +1,22 @@
++++ .bash_logout	2026-06-03 22:20:40.357706104 -0600
+@@ -1,2 +1,23 @@
  # ~/.bash_logout
  
 +LOGINCTL="$(which loginctl 2>/dev/null)"
 +
-+if [ -n "$LOGINCTL" ]
++if [ -n "$LOGINCTL" ] && [ "$XDG_SESSION_TYPE" = "tty" ]
 +then
-+	NUMSESS="$($LOGINCTL | grep -c "$(whoami)")"
-+	if [ -z "$TMUX" ] && [ "$NUMSESS" -eq 1 ]
++	NUMSESSIONS="$($LOGINCTL | grep -c "$(whoami)")"
++
++	if [ "$NUMSESSIONS" -eq 1 ] && [ -z "$TMUX" ]
 +	then
 +		if [ -S "$SSH_AUTH_SOCK" ]
 +		then
