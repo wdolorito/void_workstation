@@ -5,16 +5,26 @@
 #
 
 SUDO="$(which sudo 2>/dev/null)"
-CMD="vkpurge"
+CMD="$(which vkpurge 2>/dev/null)"
+EXTRAK=0
 
 check_kernels() {
-	echo "Checking installed kernels..."
-	KERNLIST="$($SUDO "$CMD" list)"
+	if [ -z "$1" ]
+	then
+		echo "Checking installed kernels..."
+	fi
+	KERNLIST="$($CMD list)"
+	EXTRAK="$(echo ${KERNLIST} | wc -w)"
 }
 
 remove_kernels() {
-	echo "Removing all previous kernels..."
-	$SUDO "$CMD" rm all
+	while [ "$EXTRAK" -ne 1 ]
+	do
+		PKERN="$(echo $KERNLIST | awk -F " " '{print $1}')"
+		echo "Removing previous kernel... " "$PKERN"
+		$SUDO "$(basename ${CMD})" rm "$PKERN"
+		check_kernels next
+	done
 }
 
 if [ -z "$SUDO" ]
@@ -22,9 +32,12 @@ then
 	echo "sudo command not available."
 	exit 127
 else
-	check_kernels
-	if [ -n "$KERNLIST" ]
+	if [ -z "$CMD" ]
 	then
-		remove_kernels
+		echo "vkpurge command not available."
+		exit 127
 	fi
+
+	check_kernels
+	remove_kernels
 fi
